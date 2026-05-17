@@ -62,6 +62,8 @@
       margin: 0;
       font-size: 18px;
       line-height: 1.2;
+      cursor: default;
+      user-select: none;
     }
 
     .sub {
@@ -104,23 +106,10 @@
       transition: opacity 0.15s, transform 0.15s;
     }
 
-    .toolbar button:hover:not(:disabled) {
-      opacity: 0.85;
-      transform: scale(1.02);
-    }
-
-    .toolbar button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    .toolbar button.secondary {
-      background: #111827;
-    }
-
-    .toolbar button.latest {
-      background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-    }
+    .toolbar button:hover:not(:disabled) { opacity: 0.85; transform: scale(1.02); }
+    .toolbar button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .toolbar button.secondary { background: #111827; }
+    .toolbar button.latest    { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); }
 
     .panel-header {
       padding: 12px 16px;
@@ -147,23 +136,15 @@
     }
 
     .dot {
-      width: 10px;
-      height: 10px;
+      width: 10px; height: 10px;
       border-radius: 50%;
       background: #9ca3af;
-      box-shadow: 0 0 0 4px rgba(156, 163, 175, 0.16);
+      box-shadow: 0 0 0 4px rgba(156,163,175,0.16);
       flex-shrink: 0;
     }
 
-    .dot.connected {
-      background: var(--success);
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
-    }
-
-    .dot.disconnected {
-      background: var(--danger);
-      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
-    }
+    .dot.connected    { background: var(--success); box-shadow: 0 0 0 4px rgba(34,197,94,0.16); }
+    .dot.disconnected { background: var(--danger);  box-shadow: 0 0 0 4px rgba(239,68,68,0.15); }
 
     #fetch-status {
       font-size: 12px;
@@ -172,12 +153,12 @@
       display: none;
     }
 
-    #fetch-status.testing  { background: #fff8e1; color: #7b5800; display: block; }
-    #fetch-status.success  { background: #e8f8f0; color: #1a6e3c; display: block; }
-    #fetch-status.error    { background: #fdeaea; color: #c0392b; display: block; }
+    #fetch-status.testing { background:#fff8e1; color:#7b5800; display:block; }
+    #fetch-status.success { background:#e8f8f0; color:#1a6e3c; display:block; }
+    #fetch-status.error   { background:#fdeaea; color:#c0392b; display:block; }
 
     .chat {
-      height: min(74vh, 780px);
+      height: min(68vh, 720px);
       overflow-y: auto;
       padding: 14px;
       background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
@@ -198,33 +179,11 @@
       margin-bottom: 12px;
     }
 
-    .message.own {
-      border-left: 4px solid var(--success);
-    }
-
-    .message.system {
-      background: #f8fafc;
-      color: var(--muted);
-      text-align: center;
-      font-style: italic;
-      border-style: dashed;
-    }
-
-    .message.deleted {
-      background: #fafafa;
-      border-color: #d1d5db;
-      opacity: 1;
-    }
-
-    .message.pm-received {
-      background: #ffe6f0;
-      border-left: 4px solid #e91e63;
-    }
-
-    .message.pm-sent {
-      background: #e6f0ff;
-      border-left: 4px solid #3498db;
-    }
+    .message.own         { border-left: 4px solid var(--success); }
+    .message.system      { background:#f8fafc; color:var(--muted); text-align:center; font-style:italic; border-style:dashed; }
+    .message.deleted     { background:#fafafa; border-color:#d1d5db; }
+    .message.pm-received { background:#ffe6f0; border-left:4px solid #e91e63; }
+    .message.pm-sent     { background:#e6f0ff; border-left:4px solid #3498db; }
 
     .name {
       font-weight: 800;
@@ -237,20 +196,13 @@
       flex-wrap: wrap;
     }
 
-    .deleted-badge {
-      font-size: 12px;
-      color: var(--danger);
-      font-weight: 700;
-      font-style: italic;
-    }
+    .deleted-badge { font-size:12px; color:var(--danger); font-weight:700; font-style:italic; }
 
     .status-text {
       font-size: 13px;
       color: var(--muted);
       margin-left: 8px;
       font-weight: 400;
-      display: inline-block;
-      vertical-align: middle;
     }
 
     .reply {
@@ -262,19 +214,11 @@
       color: #64748b;
       font-size: 13px;
       line-height: 1.45;
-      overflow: hidden;
       word-break: break-word;
     }
 
-    .reply-name {
-      font-weight: 700;
-      color: #475569;
-    }
-
-    .reply-text {
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
+    .reply-name { font-weight:700; color:#475569; }
+    .reply-text { white-space:pre-wrap; overflow-wrap:anywhere; }
 
     .text {
       white-space: pre-wrap;
@@ -284,10 +228,7 @@
       overflow-wrap: anywhere;
     }
 
-    .message.deleted .text {
-      color: #6b7280;
-      font-style: normal;
-    }
+    .message.deleted .text { color:#6b7280; }
 
     .meta {
       margin-top: 10px;
@@ -299,16 +240,11 @@
       flex-wrap: wrap;
     }
 
-    a {
-      color: var(--primary);
-      text-decoration: underline;
-      word-break: break-all;
-    }
+    a { color:var(--primary); text-decoration:underline; word-break:break-all; }
 
     .spinner {
       display: inline-block;
-      width: 12px;
-      height: 12px;
+      width: 12px; height: 12px;
       border: 2px solid #ffe082;
       border-top-color: #7b5800;
       border-radius: 50%;
@@ -319,21 +255,184 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ===== 隠し書き込みパネル ===== */
+    #secret-panel {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      overflow: hidden;
+      animation: slideDown 0.25s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity:0; transform:translateY(-8px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .secret-header {
+      padding: 10px 16px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #64748b;
+      user-select: none;
+    }
+
+    .secret-header span { letter-spacing: 0.05em; }
+
+    #secret-close-btn {
+      background: none;
+      border: none;
+      color: #475569;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+
+    #secret-close-btn:hover { color: #94a3b8; }
+
+    .secret-body { padding: 14px 16px; }
+
+    /* ログインフォーム */
+    #secret-login-form { display: flex; flex-direction: column; gap: 10px; }
+
+    .secret-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .secret-row input {
+      flex: 1;
+      min-width: 120px;
+      padding: 9px 12px;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      background: #1e293b;
+      color: #e2e8f0;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .secret-row input::placeholder { color: #475569; }
+    .secret-row input:focus { border-color: #3b82f6; }
+
+    .secret-row input[type="color"] {
+      width: 44px;
+      min-width: 44px;
+      flex: none;
+      padding: 4px;
+      cursor: pointer;
+    }
+
+    .secret-btn {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+
+    .secret-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .secret-btn.primary  { background: #3b82f6; color: #fff; }
+    .secret-btn.primary:hover:not(:disabled) { background: #2563eb; }
+    .secret-btn.danger   { background: #dc2626; color: #fff; }
+    .secret-btn.danger:hover:not(:disabled)  { background: #b91c1c; }
+    .secret-btn.ghost    { background: #334155; color: #94a3b8; }
+    .secret-btn.ghost:hover:not(:disabled)   { background: #475569; }
+
+    #secret-status {
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 6px;
+      display: none;
+    }
+
+    #secret-status.error   { background:#450a0a; color:#fca5a5; display:block; }
+    #secret-status.success { background:#052e16; color:#86efac; display:block; }
+    #secret-status.info    { background:#0c1a2e; color:#93c5fd; display:block; }
+
+    /* 書き込みエリア */
+    #write-area { display: none; flex-direction: column; gap: 10px; }
+
+    .write-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #64748b;
+      flex-wrap: wrap;
+    }
+
+    .write-user-badge {
+      background: #1e3a5f;
+      color: #93c5fd;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    #write-input {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 14px;
+      padding: 10px 12px;
+      resize: none;
+      height: 72px;
+      font-family: inherit;
+      outline: none;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+    }
+
+    #write-input::placeholder { color: #475569; }
+    #write-input:focus { border-color: #3b82f6; }
+
+    .write-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .write-hint { font-size: 11px; color: #475569; }
+
+    .write-actions { display: flex; gap: 8px; }
+
+    #char-count { font-size: 11px; color: #475569; }
+
+    /* ===== レスポンシブ ===== */
     @media (max-width: 640px) {
       .app { padding: 10px; }
-      .chat { height: 74vh; padding: 12px; }
+      .chat { height: 60vh; padding: 12px; }
       h1 { font-size: 17px; }
       .toolbar input { width: 100%; }
       .toolbar button { flex: 1 1 auto; }
+      .secret-row { flex-direction: column; }
     }
   </style>
 </head>
 <body>
   <div class="app">
+
+    <!-- ヘッダー -->
     <div class="header">
       <div class="title">
-        <h1>🍫 Choco Chat Viewer</h1>
-        <div class="sub">閲覧専用 — 書き込みはできません</div>
+        <h1 id="title-trigger">🍫 Choco Chat Viewer</h1>
+        <div class="sub" id="viewer-sub">閲覧専用 — 書き込みはできません</div>
       </div>
       <div class="toolbar">
         <input id="serverUrl" type="text" placeholder="接続先URLを入力" aria-label="接続先URL" />
@@ -345,6 +444,57 @@
 
     <div id="fetch-status"></div>
 
+    <!-- 隠し書き込みパネル -->
+    <div id="secret-panel" style="display:none;">
+      <div class="secret-header">
+        <span>// write mode</span>
+        <button id="secret-close-btn" title="閉じる">✕</button>
+      </div>
+      <div class="secret-body">
+        <!-- ログインフォーム -->
+        <div id="secret-login-form">
+          <div class="secret-row">
+            <input type="text"     id="secret-username" placeholder="ユーザー名" autocomplete="off" />
+            <input type="password" id="secret-password" placeholder="パスワード" />
+          </div>
+          <div class="secret-row" id="admin-row" style="display:none;">
+            <input type="password" id="secret-admin-pw" placeholder="管理者パスワード" />
+          </div>
+          <div class="secret-row">
+            <label style="color:#64748b;font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="checkbox" id="secret-admin-check" style="cursor:pointer;" />
+              管理者ログイン
+            </label>
+          </div>
+          <div class="secret-row">
+            <button class="secret-btn primary" id="secret-login-btn">ログイン</button>
+          </div>
+        </div>
+
+        <!-- 書き込みエリア（ログイン後） -->
+        <div id="write-area">
+          <div class="write-info">
+            <span class="write-user-badge" id="write-user-name"></span>
+            <span id="write-color-wrap">
+              名前色: <input type="color" id="write-color" value="#000000" />
+            </span>
+            <button class="secret-btn ghost" id="write-logout-btn" style="margin-left:auto;">ログアウト</button>
+          </div>
+          <textarea id="write-input" placeholder="メッセージを入力... (Enterで送信 / Shift+Enterで改行)" maxlength="200"></textarea>
+          <div class="write-bottom">
+            <span class="write-hint">Shift+Enterで改行　|　プライベート: /prm ユーザー名 内容</span>
+            <div class="write-actions">
+              <span id="char-count">0/200</span>
+              <button class="secret-btn primary" id="write-send-btn">送信</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="secret-status"></div>
+      </div>
+    </div>
+
+    <!-- チャットパネル -->
     <div class="panel">
       <div class="panel-header">
         <div class="status">
@@ -358,6 +508,7 @@
         <div id="empty" class="empty">接続するとメッセージが表示されます</div>
       </div>
     </div>
+
   </div>
 
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
@@ -366,16 +517,35 @@
     const LATEST_URL_LOCAL  = '/choco-chat-new';
 
     const el = {
-      chat:           document.getElementById('chat'),
-      empty:          document.getElementById('empty'),
-      connDot:        document.getElementById('connDot'),
-      connText:       document.getElementById('connText'),
-      serverLabel:    document.getElementById('serverLabel'),
-      fetchStatus:    document.getElementById('fetch-status'),
-      serverUrlInput: document.getElementById('serverUrl'),
-      connectBtn:     document.getElementById('connectBtn'),
-      disconnectBtn:  document.getElementById('disconnectBtn'),
-      latestBtn:      document.getElementById('latestBtn')
+      chat:            document.getElementById('chat'),
+      empty:           document.getElementById('empty'),
+      connDot:         document.getElementById('connDot'),
+      connText:        document.getElementById('connText'),
+      serverLabel:     document.getElementById('serverLabel'),
+      fetchStatus:     document.getElementById('fetch-status'),
+      serverUrlInput:  document.getElementById('serverUrl'),
+      connectBtn:      document.getElementById('connectBtn'),
+      disconnectBtn:   document.getElementById('disconnectBtn'),
+      latestBtn:       document.getElementById('latestBtn'),
+      titleTrigger:    document.getElementById('title-trigger'),
+      viewerSub:       document.getElementById('viewer-sub'),
+      secretPanel:     document.getElementById('secret-panel'),
+      secretCloseBtn:  document.getElementById('secret-close-btn'),
+      secretLoginForm: document.getElementById('secret-login-form'),
+      secretUsername:  document.getElementById('secret-username'),
+      secretPassword:  document.getElementById('secret-password'),
+      secretAdminCheck:document.getElementById('secret-admin-check'),
+      secretAdminPw:   document.getElementById('secret-admin-pw'),
+      adminRow:        document.getElementById('admin-row'),
+      secretLoginBtn:  document.getElementById('secret-login-btn'),
+      secretStatus:    document.getElementById('secret-status'),
+      writeArea:       document.getElementById('write-area'),
+      writeUserName:   document.getElementById('write-user-name'),
+      writeColor:      document.getElementById('write-color'),
+      writeInput:      document.getElementById('write-input'),
+      writeSendBtn:    document.getElementById('write-send-btn'),
+      writeLogoutBtn:  document.getElementById('write-logout-btn'),
+      charCount:       document.getElementById('char-count')
     };
 
     const state = {
@@ -383,9 +553,17 @@
       isAtBottom:   true,
       messageMap:   new Map(),
       messageStore: new Map(),
-      deletedIds:   new Set()
+      deletedIds:   new Set(),
+      writeMode:    false,
+      currentUser:  null,
+      currentToken: null,
+      isAdmin:      false,
+      spaceDown:    false,
+      isSending:    false,
+      heartbeatId:  null
     };
 
+    /* ========== 接続状態 ========== */
     function setConnectionState(stateName, text) {
       el.connDot.classList.remove('connected', 'disconnected');
       if (stateName) el.connDot.classList.add(stateName);
@@ -402,6 +580,7 @@
       el.fetchStatus.innerHTML = '';
     }
 
+    /* ========== ユーティリティ ========== */
     function escapeHtml(text) {
       const div = document.createElement('div');
       div.textContent = text ?? '';
@@ -409,20 +588,18 @@
     }
 
     function linkifyUrls(text) {
-      const urlPattern = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/g;
-      return text.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+      return text.replace(/(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/g,
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
     }
 
-    function formatTime(timestamp) {
-      const d = new Date(timestamp);
-      const pad = (n) => String(n).padStart(2, '0');
-      return `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    function formatTime(ts) {
+      const d = new Date(ts);
+      const p = n => String(n).padStart(2,'0');
+      return `${d.getFullYear()}/${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
     }
 
-    function scrollIfNeeded(force = false) {
-      if (force || state.isAtBottom) {
-        el.chat.scrollTop = el.chat.scrollHeight;
-      }
+    function scrollIfNeeded(force=false) {
+      if (force || state.isAtBottom) el.chat.scrollTop = el.chat.scrollHeight;
     }
 
     function showEmptyIfNeeded() {
@@ -433,97 +610,69 @@
       return data?.id ?? data?.messageId ?? data?._id ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
     }
 
-    function cloneDeep(value) {
-      if (value == null || typeof value !== 'object') return value;
-      if (typeof structuredClone === 'function') {
-        try { return structuredClone(value); } catch (_) {}
-      }
-      return JSON.parse(JSON.stringify(value));
+    function cloneDeep(v) {
+      if (v == null || typeof v !== 'object') return v;
+      if (typeof structuredClone === 'function') { try { return structuredClone(v); } catch(_){} }
+      return JSON.parse(JSON.stringify(v));
     }
 
     function normalizeMessage(data) {
       const msg = cloneDeep(data) || {};
       msg.id = normalizeId(msg);
-      if (msg.replyTo && typeof msg.replyTo === 'object') {
-        msg.replyTo = cloneDeep(msg.replyTo);
-      }
+      if (msg.replyTo && typeof msg.replyTo === 'object') msg.replyTo = cloneDeep(msg.replyTo);
       return msg;
     }
 
     function upsertMessage(data) {
-      const normalized = normalizeMessage(data);
-      const id = normalized.id;
-      const previous = state.messageStore.get(id);
-      const merged = previous ? { ...previous, ...normalized } : normalized;
-      if (previous?.replyTo && !merged.replyTo) {
-        merged.replyTo = cloneDeep(previous.replyTo);
-      }
-      if (state.deletedIds.has(id)) {
-        merged.deleted = true;
-        merged.isDeleted = true;
-        merged.status = 'deleted';
-      }
+      const n = normalizeMessage(data);
+      const id = n.id;
+      const prev = state.messageStore.get(id);
+      const merged = prev ? { ...prev, ...n } : n;
+      if (prev?.replyTo && !merged.replyTo) merged.replyTo = cloneDeep(prev.replyTo);
+      if (state.deletedIds.has(id)) { merged.deleted=true; merged.isDeleted=true; merged.status='deleted'; }
       state.messageStore.set(id, cloneDeep(merged));
       return merged;
     }
 
     function isDeletedMessage(msg, id) {
-      return Boolean(
-        msg?.deleted || msg?.isDeleted || msg?.status === 'deleted' || state.deletedIds.has(id)
-      );
+      return Boolean(msg?.deleted || msg?.isDeleted || msg?.status==='deleted' || state.deletedIds.has(id));
     }
 
     function getSnapshotById(id) {
-      const stored = state.messageStore.get(id);
-      if (!stored) return null;
-      return {
-        id,
-        username: stored.username || stored.from || '不明',
-        message: stored.message || '',
-        color: stored.color || '#1f2937',
-        timestamp: stored.timestamp || Date.now(),
-        deleted: Boolean(stored.deleted || stored.isDeleted || stored.status === 'deleted' || state.deletedIds.has(id))
-      };
+      const s = state.messageStore.get(id);
+      if (!s) return null;
+      return { id, username:s.username||s.from||'不明', message:s.message||'', color:s.color||'#1f2937',
+        timestamp:s.timestamp||Date.now(), deleted:Boolean(s.deleted||s.isDeleted||s.status==='deleted'||state.deletedIds.has(id)) };
     }
 
     function buildReplyPreview(replyTo) {
       if (!replyTo) return '';
       const refId = replyTo.id ?? replyTo.messageId ?? replyTo._id ?? null;
-      const snapshot = refId ? getSnapshotById(refId) : null;
-      const fallback = {
-        username: replyTo.username || replyTo.from || '不明',
-        message: replyTo.message || '',
-        color: replyTo.color || '#64748b',
-        deleted: Boolean(replyTo.deleted || replyTo.isDeleted || replyTo.status === 'deleted')
+      const src = (refId ? getSnapshotById(refId) : null) || {
+        username: replyTo.username||replyTo.from||'不明', message:replyTo.message||''
       };
-      const src = snapshot || fallback;
-      const previewText = escapeHtml(src.message);
-      const preview = previewText.length > 120 ? previewText.slice(0, 120) + '…' : previewText;
-      return `
-        <div class="reply">
-          <span class="reply-name">↩ ${escapeHtml(src.username)}:</span>
-          <span class="reply-text"> ${preview}</span>
-        </div>
-      `;
+      const p = escapeHtml(src.message);
+      const preview = p.length > 120 ? p.slice(0,120)+'…' : p;
+      return `<div class="reply"><span class="reply-name">↩ ${escapeHtml(src.username)}:</span><span class="reply-text"> ${preview}</span></div>`;
     }
 
     function markDeleted(id) {
       state.deletedIds.add(id);
-      const messageEl = state.messageMap.get(id);
-      if (!messageEl) return;
-      messageEl.classList.add('deleted');
-      const nameEl = messageEl.querySelector('.name');
+      const node = state.messageMap.get(id);
+      if (!node) return;
+      node.classList.add('deleted');
+      const nameEl = node.querySelector('.name');
       if (nameEl && !nameEl.querySelector('.deleted-badge')) {
-        const badge = document.createElement('span');
-        badge.className = 'deleted-badge';
-        badge.textContent = '（削除済み）';
-        nameEl.appendChild(badge);
+        const b = document.createElement('span');
+        b.className = 'deleted-badge';
+        b.textContent = '（削除済み）';
+        nameEl.appendChild(b);
       }
     }
 
     function renderMessage(data) {
       const msg = upsertMessage(data);
-      const id = msg.id;
+      const id  = msg.id;
 
       let node = state.messageMap.get(id);
       if (!node) {
@@ -533,70 +682,60 @@
         el.chat.appendChild(node);
       }
 
-      const isSystem   = msg.username === 'システム' || msg.type === 'system';
-      const deleted    = isDeletedMessage(msg, id);
-      const isPmRecv   = Boolean(msg.isPmReceived);
-      const isPmSent   = Boolean(msg.isPmSent);
+      const isSystem = msg.username==='システム' || msg.type==='system';
+      const deleted  = isDeletedMessage(msg, id);
 
       if (isSystem) {
         node.className = 'message system';
-        node.innerHTML = `
-          <div>${escapeHtml(msg.message || '')}</div>
-          <div class="meta" style="justify-content:center;">
-            <span>${formatTime(msg.timestamp || Date.now())}</span>
-          </div>
-        `;
+        node.innerHTML = `<div>${escapeHtml(msg.message||'')}</div>
+          <div class="meta" style="justify-content:center;"><span>${formatTime(msg.timestamp||Date.now())}</span></div>`;
         return node;
       }
 
-      const reply      = buildReplyPreview(msg.replyTo);
-      const name       = escapeHtml(msg.username || msg.from || '不明');
-      const text       = msg.message || '';
-      const statusText = msg.statusText ? `<span class="status-text">${escapeHtml(msg.statusText)}</span>` : '';
-      const color      = escapeHtml(msg.color || '#1f2937');
+      const isOwn    = state.currentUser && (msg.username === state.currentUser || msg.username === state.currentUser+' 管理者');
+      const isPmRecv = Boolean(msg.isPmReceived);
+      const isPmSent = Boolean(msg.isPmSent);
 
       let cls = 'message';
-      if (isPmRecv)  cls += ' pm-received';
+      if (isOwn)         cls += ' own';
+      else if (isPmRecv) cls += ' pm-received';
       else if (isPmSent) cls += ' pm-sent';
-      if (deleted) cls += ' deleted';
+      if (deleted)       cls += ' deleted';
       node.className = cls;
+
+      const reply      = buildReplyPreview(msg.replyTo);
+      const name       = escapeHtml(msg.username||msg.from||'不明');
+      const text       = msg.message||'';
+      const statusText = msg.statusText ? `<span class="status-text">${escapeHtml(msg.statusText)}</span>` : '';
+      const color      = escapeHtml(msg.color||'#1f2937');
 
       node.innerHTML = `
         ${reply}
-        <div class="name" style="color:${color}">
-          ${name}${statusText}${deleted ? '<span class="deleted-badge">（削除済み）</span>' : ''}
-        </div>
-        <div class="text">${linkifyUrls(escapeHtml(text)).replace(/\n/g, '<br>')}</div>
+        <div class="name" style="color:${color}">${name}${statusText}${deleted?'<span class="deleted-badge">（削除済み）</span>':''}</div>
+        <div class="text">${linkifyUrls(escapeHtml(text)).replace(/\n/g,'<br>')}</div>
         <div class="meta">
-          <span>${formatTime(msg.timestamp || Date.now())}</span>
-          <span>${msg.edited && !deleted ? '(編集済み)' : ''}</span>
-        </div>
-      `;
-
+          <span>${formatTime(msg.timestamp||Date.now())}</span>
+          <span>${msg.edited&&!deleted?'(編集済み)':''}</span>
+        </div>`;
       return node;
     }
 
     function rerenderDependentReplies(updatedId) {
-      state.messageStore.forEach((msg) => {
-        const replyId = msg?.replyTo?.id ?? msg?.replyTo?.messageId ?? msg?.replyTo?._id ?? null;
-        if (replyId === updatedId) renderMessage(msg);
+      state.messageStore.forEach(msg => {
+        const rid = msg?.replyTo?.id ?? msg?.replyTo?.messageId ?? msg?.replyTo?._id ?? null;
+        if (rid === updatedId) renderMessage(msg);
       });
     }
 
-    function addMessage(data) {
-      renderMessage(data);
-      showEmptyIfNeeded();
-      scrollIfNeeded();
-    }
+    function addMessage(data)   { renderMessage(data); showEmptyIfNeeded(); scrollIfNeeded(); }
 
     function updateMessage(data) {
-      const msg      = normalizeMessage(data);
-      const id       = msg.id;
-      const existed  = state.messageMap.has(id);
-      const previous = state.messageStore.get(id);
-      const merged   = previous ? { ...previous, ...msg } : msg;
-      if (previous?.replyTo && !merged.replyTo) merged.replyTo = cloneDeep(previous.replyTo);
-      if (state.deletedIds.has(id)) { merged.deleted = true; merged.isDeleted = true; merged.status = 'deleted'; }
+      const msg = normalizeMessage(data); const id = msg.id;
+      const existed = state.messageMap.has(id);
+      const prev = state.messageStore.get(id);
+      const merged = prev ? { ...prev, ...msg } : msg;
+      if (prev?.replyTo && !merged.replyTo) merged.replyTo = cloneDeep(prev.replyTo);
+      if (state.deletedIds.has(id)) { merged.deleted=true; merged.isDeleted=true; merged.status='deleted'; }
       state.messageStore.set(id, cloneDeep(merged));
       renderMessage(merged);
       rerenderDependentReplies(id);
@@ -605,32 +744,28 @@
     }
 
     function deleteMessage(data) {
-      const id = typeof data === 'object' && data !== null ? normalizeId(data) : data;
+      const id = typeof data==='object'&&data!==null ? normalizeId(data) : data;
       markDeleted(id);
-      const stored = state.messageStore.get(id);
-      if (stored) {
-        stored.deleted = true; stored.isDeleted = true; stored.status = 'deleted';
-        state.messageStore.set(id, cloneDeep(stored));
-      }
+      const s = state.messageStore.get(id);
+      if (s) { s.deleted=true; s.isDeleted=true; s.status='deleted'; state.messageStore.set(id, cloneDeep(s)); }
       rerenderDependentReplies(id);
-      showEmptyIfNeeded();
-      scrollIfNeeded();
+      showEmptyIfNeeded(); scrollIfNeeded();
     }
 
     function markAllDeleted() {
       state.messageMap.forEach((_, id) => {
         markDeleted(id);
-        const stored = state.messageStore.get(id);
-        if (stored) { stored.deleted = true; stored.isDeleted = true; stored.status = 'deleted'; state.messageStore.set(id, cloneDeep(stored)); }
+        const s = state.messageStore.get(id);
+        if (s) { s.deleted=true; s.isDeleted=true; s.status='deleted'; state.messageStore.set(id, cloneDeep(s)); }
       });
-      state.messageStore.forEach((msg) => {
-        const replyId = msg?.replyTo?.id ?? msg?.replyTo?.messageId ?? msg?.replyTo?._id ?? null;
-        if (replyId && state.deletedIds.has(replyId)) renderMessage(msg);
+      state.messageStore.forEach(msg => {
+        const rid = msg?.replyTo?.id ?? msg?.replyTo?.messageId ?? msg?.replyTo?._id ?? null;
+        if (rid && state.deletedIds.has(rid)) renderMessage(msg);
       });
-      showEmptyIfNeeded();
-      scrollIfNeeded();
+      showEmptyIfNeeded(); scrollIfNeeded();
     }
 
+    /* ========== ソケット接続 ========== */
     function disconnectSocket() {
       if (!state.socket) return;
       state.socket.removeAllListeners();
@@ -641,100 +776,269 @@
     function connect(url) {
       url = (url || el.serverUrlInput.value.trim()).replace(/\/$/, '');
       if (!url) return;
-
       el.serverUrlInput.value = url;
       localStorage.setItem('chatServerUrl', url);
       el.serverLabel.textContent = url;
       disconnectSocket();
 
-      state.socket = io(url, {
-        transports: ['websocket', 'polling'],
-        reconnection: true,
-        reconnectionAttempts: Infinity,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        timeout: 20000
-      });
+      state.socket = io(url, { transports:['websocket','polling'], reconnection:true,
+        reconnectionAttempts:Infinity, reconnectionDelay:1000, reconnectionDelayMax:5000, timeout:20000 });
 
       setConnectionState('', '接続中...');
 
-      state.socket.on('connect',       () => setConnectionState('connected', '接続済み'));
+      state.socket.on('connect',       () => {
+        setConnectionState('connected', '接続済み');
+        if (state.currentUser && state.currentToken) {
+          state.socket.emit('tokenLogin', { token: state.currentToken }, () => {});
+        }
+      });
       state.socket.on('disconnect',    () => setConnectionState('disconnected', '切断'));
       state.socket.on('connect_error', () => setConnectionState('disconnected', '接続エラー'));
       state.socket.on('reconnect',     () => setConnectionState('connected', '再接続済み'));
 
-      state.socket.on('message',         addMessage);
-      state.socket.on('messageUpdated',  updateMessage);
-      state.socket.on('messageDeleted',  deleteMessage);
+      state.socket.on('message',            addMessage);
+      state.socket.on('messageUpdated',     updateMessage);
+      state.socket.on('messageDeleted',     deleteMessage);
       state.socket.on('allMessagesDeleted', markAllDeleted);
-
-      state.socket.on('systemMessage', (text) => {
-        addMessage({ type: 'system', message: text, timestamp: Date.now() });
+      state.socket.on('systemMessage', text => addMessage({ type:'system', message:text, timestamp:Date.now() }));
+      state.socket.on('userJoined', d => addMessage({ type:'system', message:`${d.username} が参加しました`, timestamp:Date.now() }));
+      state.socket.on('userLeft',   d => addMessage({ type:'system', message:`${d.username} が退出しました`, timestamp:Date.now() }));
+      state.socket.on('privateMessage', d => {
+        addMessage({ ...d, isPmReceived: true });
       });
-
-      state.socket.on('userJoined', (data) => {
-        addMessage({ type: 'system', message: `${data.username} が参加しました`, timestamp: Date.now() });
+      state.socket.on('privateMessageSent', d => {
+        addMessage({ ...d, isPmSent: true });
       });
-
-      state.socket.on('userLeft', (data) => {
-        addMessage({ type: 'system', message: `${data.username} が退出しました`, timestamp: Date.now() });
+      state.socket.on('banned', d => {
+        showSecretStatus('error', `BAN: ${d.message||''}`);
+        doLogout();
       });
+      state.socket.on('server-ping', () => state.socket.emit('heartbeat'));
     }
 
+    /* ========== 最新URL取得 ========== */
     async function fetchLatestAndConnect() {
       el.latestBtn.disabled = true;
       el.connectBtn.disabled = true;
       showFetchStatus('testing', '<span class="spinner"></span>最新URLを取得中...');
 
-      let fetchedUrl = null;
-      let source = '';
-
+      let fetchedUrl=null, source='';
       try {
-        const res = await fetch(LATEST_URL_GITHUB, { cache: 'no-store' });
-        if (res.ok) {
-          const json = await res.json();
-          if (json?.url) { fetchedUrl = json.url.trim().replace(/\/$/, ''); source = 'GitHub'; }
-        }
-      } catch (_) {}
+        const r = await fetch(LATEST_URL_GITHUB, { cache:'no-store' });
+        if (r.ok) { const j=await r.json(); if (j?.url) { fetchedUrl=j.url.trim().replace(/\/$/,''); source='GitHub'; } }
+      } catch(_){}
 
       if (!fetchedUrl) {
         try {
-          const res = await fetch(LATEST_URL_LOCAL, { cache: 'no-store' });
-          if (res.ok) {
-            const json = await res.json();
-            if (json?.url) { fetchedUrl = json.url.trim().replace(/\/$/, ''); source = 'ローカル'; }
-          }
-        } catch (_) {}
+          const r = await fetch(LATEST_URL_LOCAL, { cache:'no-store' });
+          if (r.ok) { const j=await r.json(); if (j?.url) { fetchedUrl=j.url.trim().replace(/\/$/,''); source='ローカル'; } }
+        } catch(_){}
       }
 
       el.latestBtn.disabled = false;
       el.connectBtn.disabled = false;
 
-      if (!fetchedUrl) {
-        showFetchStatus('error', '✗ 最新URL取得に失敗しました。手動でURLを入力してください。');
-        return;
-      }
-
+      if (!fetchedUrl) { showFetchStatus('error','✗ 最新URL取得に失敗しました。手動でURLを入力してください。'); return; }
       showFetchStatus('success', `✓ ${source}から取得 — 接続します...`);
-      setTimeout(() => hideFetchStatus(), 3000);
+      setTimeout(hideFetchStatus, 3000);
       connect(fetchedUrl);
     }
 
-    el.connectBtn.addEventListener('click',    () => connect());
-    el.latestBtn.addEventListener('click',     fetchLatestAndConnect);
-    el.disconnectBtn.addEventListener('click', () => {
-      disconnectSocket();
-      setConnectionState('disconnected', '切断');
+    /* ========== 隠しパネル ========== */
+    let titleClickCount = 0, titleClickTimer = null;
+
+    function openSecretPanel() {
+      el.secretPanel.style.display = 'block';
+      if (!state.writeMode) {
+        el.secretLoginForm.style.display = 'flex';
+        el.writeArea.style.display = 'none';
+      } else {
+        el.secretLoginForm.style.display = 'none';
+        el.writeArea.style.display = 'flex';
+      }
+      hideSecretStatus();
+    }
+
+    function closeSecretPanel() {
+      el.secretPanel.style.display = 'none';
+    }
+
+    el.titleTrigger.addEventListener('click', () => {
+      titleClickCount++;
+      clearTimeout(titleClickTimer);
+      if (titleClickCount >= 3) {
+        titleClickCount = 0;
+        openSecretPanel();
+        return;
+      }
+      titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 600);
     });
 
-    el.serverUrlInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') connect();
+    document.addEventListener('keydown', e => {
+      if (e.shiftKey && e.altKey && e.key === 'W') {
+        e.preventDefault();
+        openSecretPanel();
+      }
     });
+
+    el.secretCloseBtn.addEventListener('click', closeSecretPanel);
+
+    el.secretAdminCheck.addEventListener('change', () => {
+      el.adminRow.style.display = el.secretAdminCheck.checked ? 'flex' : 'none';
+    });
+
+    /* ========== ログイン ========== */
+    function showSecretStatus(type, text) {
+      el.secretStatus.className = type;
+      el.secretStatus.textContent = text;
+      el.secretStatus.style.display = 'block';
+    }
+
+    function hideSecretStatus() {
+      el.secretStatus.className = '';
+      el.secretStatus.style.display = 'none';
+    }
+
+    function doLogin() {
+      if (!state.socket || !state.socket.connected) {
+        showSecretStatus('error', '先にサーバーに接続してください');
+        return;
+      }
+      const username    = el.secretUsername.value.trim();
+      const password    = el.secretPassword.value;
+      const adminLogin  = el.secretAdminCheck.checked;
+      const adminPassword = el.secretAdminPw.value;
+
+      if (!username || !password) { showSecretStatus('error', 'ユーザー名とパスワードを入力してください'); return; }
+      if (adminLogin && !adminPassword) { showSecretStatus('error', '管理者パスワードを入力してください'); return; }
+
+      el.secretLoginBtn.disabled = true;
+      showSecretStatus('info', 'ログイン中...');
+
+      state.socket.emit('accountLogin', { username, password, adminLogin, adminPassword }, res => {
+        el.secretLoginBtn.disabled = false;
+        if (!res || !res.success) {
+          showSecretStatus('error', res?.error || 'ログインに失敗しました');
+          return;
+        }
+        state.currentUser  = res.account.displayName;
+        state.currentToken = res.account.token;
+        state.isAdmin      = res.account.isAdmin || false;
+        state.writeMode    = true;
+        localStorage.setItem('chatToken', res.account.token);
+        localStorage.setItem('chatDisplayName', res.account.displayName);
+        el.writeColor.value = res.account.color || '#000000';
+        enterWriteMode();
+      });
+    }
+
+    function enterWriteMode() {
+      el.secretLoginForm.style.display = 'none';
+      el.writeArea.style.display       = 'flex';
+      el.writeUserName.textContent      = state.currentUser + (state.isAdmin ? ' (管理者)' : '');
+      el.viewerSub.textContent          = `書き込みモード — ${state.currentUser}`;
+      hideSecretStatus();
+      startHeartbeat();
+    }
+
+    function doLogout() {
+      if (state.socket && state.currentToken) {
+        state.socket.emit('accountLogout', { token: state.currentToken });
+      }
+      stopHeartbeat();
+      state.currentUser  = null;
+      state.currentToken = null;
+      state.isAdmin      = false;
+      state.writeMode    = false;
+      localStorage.removeItem('chatToken');
+      localStorage.removeItem('chatDisplayName');
+      el.secretLoginForm.style.display = 'flex';
+      el.writeArea.style.display       = 'none';
+      el.viewerSub.textContent          = '閲覧専用 — 書き込みはできません';
+      el.secretUsername.value = '';
+      el.secretPassword.value = '';
+      el.secretAdminPw.value  = '';
+      el.secretAdminCheck.checked = false;
+      el.adminRow.style.display = 'none';
+      showSecretStatus('info', 'ログアウトしました');
+    }
+
+    function startHeartbeat() {
+      stopHeartbeat();
+      state.heartbeatId = setInterval(() => {
+        if (state.socket?.connected) state.socket.emit('heartbeat');
+      }, 25000);
+    }
+
+    function stopHeartbeat() {
+      if (state.heartbeatId) { clearInterval(state.heartbeatId); state.heartbeatId = null; }
+    }
+
+    el.secretLoginBtn.addEventListener('click', doLogin);
+    el.writeLogoutBtn.addEventListener('click', doLogout);
+
+    el.secretUsername.addEventListener('keypress', e => { if (e.key==='Enter') doLogin(); });
+    el.secretPassword.addEventListener('keypress', e => { if (e.key==='Enter') doLogin(); });
+
+    /* ========== メッセージ送信 ========== */
+    el.writeInput.addEventListener('input', () => {
+      const len = el.writeInput.value.length;
+      el.charCount.textContent = `${len}/200`;
+      el.charCount.style.color = len > 180 ? '#ef4444' : len > 150 ? '#f59e0b' : '#475569';
+    });
+
+    function sendWriteMessage() {
+      if (state.isSending || !state.writeMode) return;
+      const message = el.writeInput.value.trim();
+      if (!message) return;
+      if (!state.socket?.connected) { showSecretStatus('error', '接続が切れています'); openSecretPanel(); return; }
+
+      state.isSending = true;
+      el.writeSendBtn.disabled = true;
+
+      state.socket.emit('sendMessage', {
+        message,
+        replyTo: null,
+        color: el.writeColor.value
+      }, res => {
+        state.isSending = false;
+        el.writeSendBtn.disabled = false;
+        if (res?.success) {
+          el.writeInput.value = '';
+          el.charCount.textContent = '0/200';
+          el.charCount.style.color = '#475569';
+        } else {
+          showSecretStatus('error', res?.error || '送信に失敗しました');
+          openSecretPanel();
+        }
+      });
+    }
+
+    el.writeSendBtn.addEventListener('click', sendWriteMessage);
+
+    el.writeInput.addEventListener('keydown', e => {
+      if (e.key === ' ') state.spaceDown = true;
+      if (e.key === 'Enter' && !e.shiftKey && !state.spaceDown) {
+        e.preventDefault();
+        sendWriteMessage();
+      }
+    });
+
+    el.writeInput.addEventListener('keyup', e => {
+      if (e.key === ' ') state.spaceDown = false;
+    });
+
+    /* ========== スクロール・接続ボタン ========== */
+    el.connectBtn.addEventListener('click',    () => connect());
+    el.latestBtn.addEventListener('click',     fetchLatestAndConnect);
+    el.disconnectBtn.addEventListener('click', () => { disconnectSocket(); setConnectionState('disconnected','切断'); });
+    el.serverUrlInput.addEventListener('keypress', e => { if (e.key==='Enter') connect(); });
 
     el.chat.addEventListener('scroll', () => {
       state.isAtBottom = el.chat.scrollHeight - el.chat.scrollTop - el.chat.clientHeight < 80;
     });
 
+    /* ========== 初期化 ========== */
     window.addEventListener('load', () => {
       const savedUrl = localStorage.getItem('chatServerUrl');
       if (savedUrl) {

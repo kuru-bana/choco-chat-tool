@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Choco Chat Viewer</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --line: #e5e7eb;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .header,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 14px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .toolbar input {
+      width: min(100%, 300px);
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      outline: none;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .toolbar input:focus {
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+    }
+
+    .toolbar button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      background: var(--primary);
+      white-space: nowrap;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .toolbar button:hover:not(:disabled) {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
+
+    .toolbar button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .toolbar button.secondary {
+      background: #111827;
+    }
+
+    .toolbar button.latest {
+      background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    }
+
+    .panel-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #4b5563;
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #9ca3af;
+      box-shadow: 0 0 0 4px rgba(156, 163, 175, 0.16);
+      flex-shrink: 0;
+    }
+
+    .dot.connected {
+      background: var(--success);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.16);
+    }
+
+    .dot.disconnected {
+      background: var(--danger);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+    }
+
+    #fetch-status {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    #fetch-status.testing  { background: #fff8e1; color: #7b5800; display: block; }
+    #fetch-status.success  { background: #e8f8f0; color: #1a6e3c; display: block; }
+    #fetch-status.error    { background: #fdeaea; color: #c0392b; display: block; }
+
+    .chat {
+      height: min(74vh, 780px);
+      overflow-y: auto;
+      padding: 14px;
+      background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
+    }
+
+    .empty {
+      padding: 48px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .message {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #fff;
+      margin-bottom: 12px;
+    }
+
+    .message.own {
+      border-left: 4px solid var(--success);
+    }
+
+    .message.system {
+      background: #f8fafc;
+      color: var(--muted);
+      text-align: center;
+      font-style: italic;
+      border-style: dashed;
+    }
+
+    .message.deleted {
+      background: #fafafa;
+      border-color: #d1d5db;
+      opacity: 1;
+    }
+
+    .message.pm-received {
+      background: #ffe6f0;
+      border-left: 4px solid #e91e63;
+    }
+
+    .message.pm-sent {
+      background: #e6f0ff;
+      border-left: 4px solid #3498db;
+    }
+
+    .name {
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 8px;
+      word-break: break-word;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .deleted-badge {
+      font-size: 12px;
+      color: var(--danger);
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    .status-text {
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: 8px;
+      font-weight: 400;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .reply {
+      margin-bottom: 8px;
+      padding: 8px 10px;
+      border-left: 3px solid #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.45;
+      overflow: hidden;
+      word-break: break-word;
+    }
+
+    .reply-name {
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .reply-text {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .text {
+      white-space: pre-wrap;
+      line-height: 1.65;
+      font-size: 15px;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .message.deleted .text {
+      color: #6b7280;
+      font-style: normal;
+    }
+
+    .meta {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #ffe082;
+      border-top-color: #7b5800;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 640px) {
+      .app { padding: 10px; }
+      .chat { height: 74vh; padding: 12px; }
+      h1 { font-size: 17px; }
+      .toolbar input { width: 100%; }
+      .toolbar button { flex: 1 1 auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="title">
+        <h1>🍫 Choco Chat Viewer</h1>
+        <div class="sub">閲覧専用 — 書き込みはできません</div>
+      </div>
+      <div class="toolbar">
+        <input id="serverUrl" type="text" placeholder="接続先URLを入力" aria-label="接続先URL" />
+        <button id="latestBtn" class="latest">⚡ 最新</button>
+        <button id="connectBtn">接続</button>
+        <button id="disconnectBtn" class="secondary">切断</button>
+      </div>
+    </div>
+
+    <div id="fetch-status"></div>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="status">
+          <span id="connDot" class="dot"></span>
+          <span id="connText">未接続</span>
+        </div>
+        <span id="serverLabel" style="font-size:12px;color:#9ca3af;font-family:monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%;"></span>
+      </div>
+
+      <div id="chat" class="chat">
+        <div id="empty" class="empty">接続するとメッセージが表示されます</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const LATEST_URL_GITHUB = 'https://raw.githubusercontent.com/kuru-bana/choco-chat-tool/refs/heads/main/url.json';
+    const LATEST_URL_LOCAL  = '/choco-chat-new';
+
+    const el = {
+      chat:           document.getElementById('chat'),
+      empty:          document.getElementById('empty'),
+      connDot:        document.getElementById('connDot'),
+      connText:       document.getElementById('connText'),
+      serverLabel:    document.getElementById('serverLabel'),
+      fetchStatus:    document.getElementById('fetch-status'),
+      serverUrlInput: document.getElementById('serverUrl'),
+      connectBtn:     document.getElementById('connectBtn'),
+      disconnectBtn:  document.getElementById('disconnectBtn'),
+      latestBtn:      document.getElementById('latestBtn')
+    };
+
+    const state = {
+      socket:       null,
+      isAtBottom:   true,
+      messageMap:   new Map(),
+      messageStore: new Map(),
+      deletedIds:   new Set()
+    };
+
+    function setConnectionState(stateName, text) {
+      el.connDot.classList.remove('connected', 'disconnected');
+      if (stateName) el.connDot.classList.add(stateName);
+      el.connText.textContent = text;
+    }
+
+    function showFetchStatus(type, html) {
+      el.fetchStatus.className = type;
+      el.fetchStatus.innerHTML = html;
+    }
+
+    function hideFetchStatus() {
+      el.fetchStatus.className = '';
+      el.fetchStatus.innerHTML = '';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text ?? '';
+      return div.innerHTML;
+    }
+
+    function linkifyUrls(text) {
+      const urlPattern = /(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/g;
+      return text.replace(urlPattern, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    }
+
+    function formatTime(timestamp) {
+      const d = new Date(timestamp);
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    function scrollIfNeeded(force = false) {
+      if (force || state.isAtBottom) {
+        el.chat.scrollTop = el.chat.scrollHeight;
+      }
+    }
+
+    function showEmptyIfNeeded() {
+      el.empty.style.display = state.messageMap.size === 0 ? 'block' : 'none';
+    }
+
+    function normalizeId(data) {
+      return data?.id ?? data?.messageId ?? data?._id ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function cloneDeep(value) {
+      if (value == null || typeof value !== 'object') return value;
+      if (typeof structuredClone === 'function') {
+        try { return structuredClone(value); } catch (_) {}
+      }
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function normalizeMessage(data) {
+      const msg = cloneDeep(data) || {};
+      msg.id = normalizeId(msg);
+      if (msg.replyTo && typeof msg.replyTo === 'object') {
+        msg.replyTo = cloneDeep(msg.replyTo);
+      }
+      return msg;
+    }
+
+    function upsertMessage(data) {
+      const normalized = normalizeMessage(data);
+      const id = normalized.id;
+      const previous = state.messageStore.get(id);
+      const merged = previous ? { ...previous, ...normalized } : normalized;
+      if (previous?.replyTo && !merged.replyTo) {
+        merged.replyTo = cloneDeep(previous.replyTo);
+      }
+      if (state.deletedIds.has(id)) {
+        merged.deleted = true;
+        merged.isDeleted = true;
+        merged.status = 'deleted';
+      }
+      state.messageStore.set(id, cloneDeep(merged));
+      return merged;
+    }
+
+    function isDeletedMessage(msg, id) {
+      return Boolean(
+        msg?.deleted || msg?.isDeleted || msg?.status === 'deleted' || state.deletedIds.has(id)
+      );
+    }
+
+    function getSnapshotById(id) {
+      const stored = state.messageStore.get(id);
+      if (!stored) return null;
+      return {
+        id,
+        username: stored.username || stored.from || '不明',
+        message: stored.message || '',
+        color: stored.color || '#1f2937',
+        timestamp: stored.timestamp || Date.now(),
+        deleted: Boolean(stored.deleted || stored.isDeleted || stored.status === 'deleted' || state.deletedIds.has(id))
+      };
+    }
+
+    function buildReplyPreview(replyTo) {
+      if (!replyTo) return '';
+      const refId = replyTo.id ?? replyTo.messageId ?? replyTo._id ?? null;
+      const snapshot = refId ? getSnapshotById(refId) : null;
+      const fallback = {
+        username: replyTo.username || replyTo.from || '不明',
+        message: replyTo.message || '',
+        color: replyTo.color || '#64748b',
+        deleted: Boolean(replyTo.deleted || replyTo.isDeleted || replyTo.status === 'deleted')
+      };
+      const src = snapshot || fallback;
+      const previewText = escapeHtml(src.message);
+      const preview = previewText.length > 120 ? previewText.slice(0, 120) + '…' : previewText;
+      return `
+        <div class="reply">
+          <span class="reply-name">↩ ${escapeHtml(src.username)}:</span>
+          <span class="reply-text"> ${preview}</span>
+        </div>
+      `;
+    }
+
+    function markDeleted(id) {
+      state.deletedIds.add(id);
+      const messageEl = state.messageMap.get(id);
+      if (!messageEl) return;
+      messageEl.classList.add('deleted');
+      const nameEl = messageEl.querySelector('.name');
+      if (nameEl && !nameEl.querySelector('.deleted-badge')) {
+        const badge = document.createElement('span');
+        badge.className = 'deleted-badge';
+        badge.textContent = '（削除済み）';
+        nameEl.appendChild(badge);
+      }
+    }
+
+    function renderMessage(data) {
+      const msg = upsertMessage(data);
+      const id = msg.id;
+
+      let node = state.messageMap.get(id);
+      if (!node) {
+        node = document.createElement('div');
+        node.dataset.id = id;
+        state.messageMap.set(id, node);
+        el.chat.appendChild(node);
+      }
+
+      const isSystem   = msg.username === 'システム' || msg.type === 'system';
+      const deleted    = isDeletedMessage(msg, id);
+      const isPmRecv   = Boolean(msg.isPmReceived);
+      const isPmSent   = Boolean(msg.isPmSent);
+
+      if (isSystem) {
+        node.className = 'message system';
+        node.innerHTML = `
+          <div>${escapeHtml(msg.message || '')}</div>
+          <div class="meta" style="justify-content:center;">
+            <span>${formatTime(msg.timestamp || Date.now())}</span>
+          </div>
+        `;
+        return node;
+      }
+
+      const reply      = buildReplyPreview(msg.replyTo);
+      const name       = escapeHtml(msg.username || msg.from || '不明');
+      const text       = msg.message || '';
+      const statusText = msg.statusText ? `<span class="status-text">${escapeHtml(msg.statusText)}</span>` : '';
+      const color      = escapeHtml(msg.color || '#1f2937');
+
+      let cls = 'message';
+      if (isPmRecv)  cls += ' pm-received';
+      else if (isPmSent) cls += ' pm-sent';
+      if (deleted) cls += ' deleted';
+      node.className = cls;
+
+      node.innerHTML = `
+        ${reply}
+        <div class="name" style="color:${color}">
+          ${name}${statusText}${deleted ? '<span class="deleted-badge">（削除済み）</span>' : ''}
+        </div>
+        <div class="text">${linkifyUrls(escapeHtml(text)).replace(/\n/g, '<br>')}</div>
+        <div class="meta">
+          <span>${formatTime(msg.timestamp || Date.now())}</span>
+          <span>${msg.edited && !deleted ? '(編集済み)' : ''}</span>
+        </div>
+      `;
+
+      return node;
+    }
+
+    function rerenderDependentReplies(updatedId) {
+      state.messageStore.forEach((msg) => {
+        const replyId = msg?.replyTo?.id ?? msg?.replyTo?.messageId ?? msg?.replyTo?._id ?? null;
+        if (replyId === updatedId) renderMessage(msg);
+      });
+    }
+
+    function addMessage(data) {
+      renderMessage(data);
+      showEmptyIfNeeded();
+      scrollIfNeeded();
+    }
+
+    function updateMessage(data) {
+      const msg      = normalizeMessage(data);
+      const id       = msg.id;
+      const existed  = state.messageMap.has(id);
+      const previous = state.messageStore.get(id);
+      const merged   = previous ? { ...previous, ...msg } : msg;
+      if (previous?.replyTo && !merged.replyTo) merged.replyTo = cloneDeep(previous.replyTo);
+      if (state.deletedIds.has(id)) { merged.deleted = true; merged.isDeleted = true; merged.status = 'deleted'; }
+      state.messageStore.set(id, cloneDeep(merged));
+      renderMessage(merged);
+      rerenderDependentReplies(id);
+      if (!existed) showEmptyIfNeeded();
+      scrollIfNeeded();
+    }
+
+    function deleteMessage(data) {
+      const id = typeof data === 'object' && data !== null ? normalizeId(data) : data;
+      markDeleted(id);
+      const stored = state.messageStore.get(id);
+      if (stored) {
+        stored.deleted = true; stored.isDeleted = true; stored.status = 'deleted';
+        state.messageStore.set(id, cloneDeep(stored));
+      }
+      rerenderDependentReplies(id);
+      showEmptyIfNeeded();
+      scrollIfNeeded();
+    }
+
+    function markAllDeleted() {
+      state.messageMap.forEach((_, id) => {
+        markDeleted(id);
+        const stored = state.messageStore.get(id);
+        if (stored) { stored.deleted = true; stored.isDeleted = true; stored.status = 'deleted'; state.messageStore.set(id, cloneDeep(stored)); }
+      });
+      state.messageStore.forEach((msg) => {
+        const replyId = msg?.replyTo?.id ?? msg?.replyTo?.messageId ?? msg?.replyTo?._id ?? null;
+        if (replyId && state.deletedIds.has(replyId)) renderMessage(msg);
+      });
+      showEmptyIfNeeded();
+      scrollIfNeeded();
+    }
+
+    function disconnectSocket() {
+      if (!state.socket) return;
+      state.socket.removeAllListeners();
+      state.socket.close();
+      state.socket = null;
+    }
+
+    function connect(url) {
+      url = (url || el.serverUrlInput.value.trim()).replace(/\/$/, '');
+      if (!url) return;
+
+      el.serverUrlInput.value = url;
+      localStorage.setItem('chatServerUrl', url);
+      el.serverLabel.textContent = url;
+      disconnectSocket();
+
+      state.socket = io(url, {
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionAttempts: Infinity,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        timeout: 20000
+      });
+
+      setConnectionState('', '接続中...');
+
+      state.socket.on('connect',       () => setConnectionState('connected', '接続済み'));
+      state.socket.on('disconnect',    () => setConnectionState('disconnected', '切断'));
+      state.socket.on('connect_error', () => setConnectionState('disconnected', '接続エラー'));
+      state.socket.on('reconnect',     () => setConnectionState('connected', '再接続済み'));
+
+      state.socket.on('message',         addMessage);
+      state.socket.on('messageUpdated',  updateMessage);
+      state.socket.on('messageDeleted',  deleteMessage);
+      state.socket.on('allMessagesDeleted', markAllDeleted);
+
+      state.socket.on('systemMessage', (text) => {
+        addMessage({ type: 'system', message: text, timestamp: Date.now() });
+      });
+
+      state.socket.on('userJoined', (data) => {
+        addMessage({ type: 'system', message: `${data.username} が参加しました`, timestamp: Date.now() });
+      });
+
+      state.socket.on('userLeft', (data) => {
+        addMessage({ type: 'system', message: `${data.username} が退出しました`, timestamp: Date.now() });
+      });
+    }
+
+    async function fetchLatestAndConnect() {
+      el.latestBtn.disabled = true;
+      el.connectBtn.disabled = true;
+      showFetchStatus('testing', '<span class="spinner"></span>最新URLを取得中...');
+
+      let fetchedUrl = null;
+      let source = '';
+
+      try {
+        const res = await fetch(LATEST_URL_GITHUB, { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (json?.url) { fetchedUrl = json.url.trim().replace(/\/$/, ''); source = 'GitHub'; }
+        }
+      } catch (_) {}
+
+      if (!fetchedUrl) {
+        try {
+          const res = await fetch(LATEST_URL_LOCAL, { cache: 'no-store' });
+          if (res.ok) {
+            const json = await res.json();
+            if (json?.url) { fetchedUrl = json.url.trim().replace(/\/$/, ''); source = 'ローカル'; }
+          }
+        } catch (_) {}
+      }
+
+      el.latestBtn.disabled = false;
+      el.connectBtn.disabled = false;
+
+      if (!fetchedUrl) {
+        showFetchStatus('error', '✗ 最新URL取得に失敗しました。手動でURLを入力してください。');
+        return;
+      }
+
+      showFetchStatus('success', `✓ ${source}から取得 — 接続します...`);
+      setTimeout(() => hideFetchStatus(), 3000);
+      connect(fetchedUrl);
+    }
+
+    el.connectBtn.addEventListener('click',    () => connect());
+    el.latestBtn.addEventListener('click',     fetchLatestAndConnect);
+    el.disconnectBtn.addEventListener('click', () => {
+      disconnectSocket();
+      setConnectionState('disconnected', '切断');
+    });
+
+    el.serverUrlInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') connect();
+    });
+
+    el.chat.addEventListener('scroll', () => {
+      state.isAtBottom = el.chat.scrollHeight - el.chat.scrollTop - el.chat.clientHeight < 80;
+    });
+
+    window.addEventListener('load', () => {
+      const savedUrl = localStorage.getItem('chatServerUrl');
+      if (savedUrl) {
+        el.serverUrlInput.value = savedUrl;
+        el.serverLabel.textContent = savedUrl;
+        connect(savedUrl);
+      }
+      showEmptyIfNeeded();
+    });
+  </script>
+</body>
+</html>

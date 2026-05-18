@@ -177,6 +177,58 @@ body.theme-blue {
   to { transform: rotate(360deg); }
 }
 
+.setup-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+  color: #bbb;
+  font-size: 12px;
+}
+
+.setup-divider::before,
+.setup-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+#latest-connect-btn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+#latest-connect-btn:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: scale(1.02);
+}
+
+#latest-connect-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.latest-hint {
+  font-size: 11px;
+  color: #bbb;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
 /* ===== 認証画面 ===== */
 #auth-section {
   min-height: calc(100vh - 60px);
@@ -1891,6 +1943,12 @@ body.theme-blue {
       <div class="server-setup-logo">🍫</div>
       <h1>ちょこちゃっとツール</h1>
       <p class="server-setup-subtitle">接続するサーバーのURLを入力してください</p>
+
+      <button id="latest-connect-btn">⚡ 最新のchatに接続</button>
+      <p class="latest-hint">公式の最新サーバーURLを自動取得して接続します</p>
+
+      <div class="setup-divider">または手動で入力</div>
+
       <label class="server-setup-label" for="server-url-input">サーバーURL</label>
       <input type="text" id="server-url-input" placeholder="https://your-server.replit.app" autocomplete="off" spellcheck="false">
       <button id="server-connect-btn">接続する</button>
@@ -2246,6 +2304,90 @@ if (!storedServerUrl) {
       }
     }
   }
+
+  const LATEST_URL_GITHUB = 'https://raw.githubusercontent.com/kuru-bana/choco-chat-tool/refs/heads/main/url.json';
+  const LATEST_URL_LOCAL  = '/choco-chat-new';
+
+  async function fetchLatestUrl() {
+    const latestBtn = document.getElementById('latest-connect-btn');
+    latestBtn.disabled = true;
+    connectBtn.disabled = true;
+    urlInput.disabled = true;
+    showStatus('testing', '<div class="status-spinner"></div>最新URLを取得中...');
+
+    let fetchedUrl = null;
+    let source = '';
+
+    // 1) GitHub から取得を試みる
+    try {
+      const res = await fetch(LATEST_URL_GITHUB, { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.url) {
+          fetchedUrl = json.url.trim().replace(/\/$/, '');
+          source = 'GitHub';
+        }
+      }
+    } catch (_) {}
+
+    // 2) GitHub が失敗したら同一オリジンの /choco-chat-new を試みる
+    if (!fetchedUrl) {
+      try {
+        const res = await fetch(LATEST_URL_LOCAL, { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          if (json && json.url) {
+            fetchedUrl = json.url.trim().replace(/\/$/, '');
+            source = 'ローカル';
+          }
+        }
+      } catch (_) {}
+    }
+
+    if (!fetchedUrl) {
+      latestBtn.disabled = false;
+      connectBtn.disabled = false;
+      urlInput.disabled = false;
+      showStatus('error',
+        '✗ 最新URL取得に失敗しました。<br>' +
+        '<span style="font-size:12px;font-weight:normal;">手動でURLを入力するか、このツールを自サイトで運用する場合は ' +
+        '<code style="background:#fdd;padding:1px 4px;border-radius:3px;">GET /choco-chat-new</code> ' +
+        'エンドポイントで <code>{"url":"..."}</code> を返すようにすると自動取得できます。</span>'
+      );
+      return;
+    }
+
+    // 取得成功 → 接続テストへ
+    showStatus('testing', `<div class="status-spinner"></div>${source}から取得完了。接続テスト中...`);
+    urlInput.value = fetchedUrl;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 7000);
+    try {
+      await fetch(fetchedUrl + '/socket.io/?EIO=4&transport=polling', {
+        mode: 'no-cors',
+        signal: controller.signal
+      });
+      clearTimeout(timeout);
+      showStatus('success', `✓ 接続成功！（${source}）ログイン画面へ移動します...`);
+      setTimeout(() => {
+        localStorage.setItem('chatServerUrl', fetchedUrl);
+        window.location.reload();
+      }, 900);
+    } catch (e) {
+      clearTimeout(timeout);
+      latestBtn.disabled = false;
+      connectBtn.disabled = false;
+      urlInput.disabled = false;
+      const msg = e.name === 'AbortError' ? 'タイムアウト' : '到達不能';
+      showStatus('error',
+        `✗ URLは取得できましたが接続に失敗しました（${msg}）。<br>` +
+        `<span style="font-size:12px;font-weight:normal;">取得されたURL: <code>${fetchedUrl}</code></span>`
+      );
+    }
+  }
+
+  document.getElementById('latest-connect-btn').addEventListener('click', fetchLatestUrl);
 
   connectBtn.addEventListener('click', doConnect);
   urlInput.addEventListener('keypress', (e) => {
@@ -4027,7 +4169,7 @@ document.querySelectorAll('.admin-action-btn').forEach(btn => {
     }
   });
 });
-
+ 
 })();
   </script>
 </body>
